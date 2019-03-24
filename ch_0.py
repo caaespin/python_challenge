@@ -1,4 +1,8 @@
 # Challenge 0
+import urllib.request as request
+from collections import defaultdict
+from html.parser import HTMLParser
+
 url = f'http://www.pythonchallenge.com/pc/def/{2**38}.html'
 print(url)
 
@@ -13,4 +17,29 @@ print(cryptic_text.translate(trantab))
 next_page = 'map'.translate(trantab)
 print(f'http://www.pythonchallenge.com/pc/def/{next_page}.html')
 
+
 # Challenge 2
+class MyHTMLParser(HTMLParser):
+    def error(self, message):
+        pass
+
+    def handle_comment(self, data):
+        char_count = defaultdict(int)
+        print(data)
+        for char in data:
+            char_count[char] += 1
+            if char.isalpha():
+                print(char)
+        print(sorted(char_count.items()))
+
+
+page = request.urlopen('http://www.pythonchallenge.com/pc/def/ocr.html')
+page_bytes = page.read()
+page_string = page_bytes.decode('utf8')
+page.close()
+
+parser = MyHTMLParser()
+parser.feed(page_string)
+
+# Challenge 3
+# Get the comment and get each small case letter that's flanked by 3 upper case letters
