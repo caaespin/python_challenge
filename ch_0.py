@@ -64,3 +64,36 @@ page.close()
 
 parser = MyHTMLParser()
 parser.feed(page_string)
+
+
+# Challenge 4
+print("Now moving on to Challenge 4")
+
+
+def get_url_text(_url):
+    p = request.urlopen(_url)
+    binary = p.read()
+    p.close()
+    return binary.decode('utf8')
+
+
+def get_next_nothing(_url):
+    text = get_url_text(_url)
+    found = re.findall(r'[0-9]+', text)
+    print(found)
+    if not found:
+        return text
+    number = found.pop()
+    if number in {'16044'}:
+        number = str(int(number) // 2)
+    return number
+
+
+nothing = '12345'
+for i in range(0, 400):
+    nothing = get_next_nothing(f'http://www.pythonchallenge.com/pc/def/linkedlist.php?nothing={nothing}')
+    print(f'Cycle {i}: {nothing}')
+    if nothing.endswith('html'):
+        break
+
+print(nothing)
