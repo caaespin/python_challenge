@@ -1,4 +1,5 @@
 # Challenge 0
+import re
 import urllib.request as request
 from collections import defaultdict
 from html.parser import HTMLParser
@@ -41,5 +42,25 @@ page.close()
 parser = MyHTMLParser()
 parser.feed(page_string)
 
+
 # Challenge 3
 # Get the comment and get each small case letter that's flanked by 3 upper case letters
+class MyHTMLParser(HTMLParser):
+    def error(self, message):
+        pass
+
+    def handle_comment(self, data):
+        print('About to handle Challenge 3 text')
+        regex = re.compile(r'(?<=(?<![A-Z])[A-Z]{3})[a-z](?=[A-Z]{3}(?![A-Z]))')
+        secret_text = ''.join([char for line in data.split('\n') for char in regex.findall(line)])
+        print(secret_text)
+        pass
+
+
+page = request.urlopen('http://www.pythonchallenge.com/pc/def/equality.html')
+page_bytes = page.read()
+page_string = page_bytes.decode('utf8')
+page.close()
+
+parser = MyHTMLParser()
+parser.feed(page_string)
