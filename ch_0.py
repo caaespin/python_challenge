@@ -1,8 +1,10 @@
 # Challenge 0
+import pickle
 import re
 import urllib.request as request
 from collections import defaultdict
 from html.parser import HTMLParser
+from pprint import pprint
 
 url = f'http://www.pythonchallenge.com/pc/def/{2**38}.html'
 print(url)
@@ -26,7 +28,6 @@ class MyHTMLParser(HTMLParser):
 
     def handle_comment(self, data):
         char_count = defaultdict(int)
-        print(data)
         for char in data:
             char_count[char] += 1
             if char.isalpha():
@@ -88,12 +89,29 @@ def get_next_nothing(_url):
         number = str(int(number) // 2)
     return number
 
+#
+# nothing = '12345'
+# for i in range(0, 400):
+#     nothing = get_next_nothing(f'http://www.pythonchallenge.com/pc/def/linkedlist.php?nothing={nothing}')
+#     print(f'Cycle {i}: {nothing}')
+#     if nothing.endswith('html'):
+#         break
+#
+# print(nothing) # Nothing is peak.html. Commenting out to avoid waiting for the http calls to finish
 
-nothing = '12345'
-for i in range(0, 400):
-    nothing = get_next_nothing(f'http://www.pythonchallenge.com/pc/def/linkedlist.php?nothing={nothing}')
-    print(f'Cycle {i}: {nothing}')
-    if nothing.endswith('html'):
-        break
 
-print(nothing)
+# Challenge 5
+
+print("Now challenge 5")
+with request.urlopen('http://www.pythonchallenge.com/pc/def/banner.p') as f:
+    b = f.read()
+unpickled = pickle.loads(b)
+for row in unpickled:
+    row_text = ''
+    for cell in row:
+        row_text += cell[0] * cell[1]
+    print(row_text)
+
+
+
+
